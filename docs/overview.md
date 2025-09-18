@@ -12,43 +12,6 @@ AIChat follows a client-server architecture:
 * **Backend:** Node.js + Express server, acts as the API gateway, connects to Database & AI providers(OpenAI, Google, etc).
 * **Database:** MongoDB (stores users, messages, presets, conversations).
 
-1. **User Opens the App**  
-   The browser loads the React frontend, which immediately requests initial configuration (available AI models, settings, etc.) from the backend.
-
-2. **Frontend Fetches Config**  
-   The React app calls `GET /config`.  
-   The backend fetches app settings (presets, available providers, etc.) from MongoDB and returns them as JSON.
-
-3. **User Sends a Message**  
-   When the user types a message and clicks send, the frontend sends a `POST /chat` request to the backend.
-
-4. **Backend Processes the Request**  
-   The backend:
-   * Stores the user's message in the **messages** collection.
-   * Forwards the message to the selected **AI provider** (OpenAI, Anthropic, etc.).
-   * Waits for the AI’s response.
-
-5. **AI Response Returned**  
-   The backend stores the AI response in the database and sends it back to the frontend.
-
-6. **Frontend Updates the UI**  
-   The React app updates the chat interface, displaying the AI’s reply to the user.
-
-* We run the npm run backend command on our terminal to start the application. Using the port:3080 starts the application.
-* Frontend loads the React app assets from `client/` and fetches the config settings from `.env` like available AI providers, user settings.
-* Backend server (Node.js) starts listening to this port. It connects Database for users, conversation history, messages data. Also connects to AI providers and loads middleware like auth.
-
-* We login via the frontend forms (Credentials and user data are stored in DB).
-
-* When we submit a prompt, the frontend sends a HTTP request to backend with the prompt, metadata, model, conversationID, etc
-* Backend receives the request and validates it and checks for the previous messages in conversation (if any)
-* Backend then sends message + context to the AI provider
-* Once the backend recieves the response from the AI, it stores in the database and returns the response to the frontend and updates UI.
-
-
-
-
-### Detailed Flow (Step-by-Step)
 
 1. **Application Startup**  
    * The backend is started with `npm run backend`. It loads environment variables from `.env`, connects to MongoDB, initializes middleware (authentication, logging, etc.), and listens on **port 3080**.  
@@ -56,7 +19,7 @@ AIChat follows a client-server architecture:
 
 2. **User Opens the App**  
    * The browser loads the React frontend.  
-   * Immediately, the frontend sends a `GET /config` request to fetch available AI models, presets, and settings.
+   * Immediately, the frontend sends a `GET /config` request to fetch details about available AI models, presets, and settings.
 
 3. **Backend Responds with Configuration**  
    * The backend queries MongoDB for presets and settings.  
@@ -64,14 +27,15 @@ AIChat follows a client-server architecture:
 
 4. **User Authentication**  
    * If login is required, credentials are sent to the backend.  
-   * The backend validates the credentials, creates a session/JWT token, and returns it to the frontend for future authenticated requests.
+   * The backend validates the credentials, creates a session, and returns it to the frontend for future authenticated requests.
 
 5. **User Sends a Message**  
    * When the user sends a message, the frontend sends a `POST /chat` request containing:
      * Message text  
      * Selected AI model/provider  
-     * Conversation ID (if applicable)  
-     * Metadata  
+     * Conversation ID (if applicable i.e., previous chat history)  
+     * Metadata 
+     * Files (if attached) 
 
 6. **Backend Handles the Request**  
    * The backend stores the message in the **messages** collection.  
@@ -82,8 +46,8 @@ AIChat follows a client-server architecture:
    * The backend stores this reply in the database and sends it back to the frontend.
 
 8. **Frontend Updates the UI**  
-   * The frontend receives the response and displays it in the chat interface.  
-   * If streaming is enabled, the message appears progressively as tokens are received.
+   * The frontend receives the response and displays it in the chat interface and modifies the UI.  
+
 
 
 ### Sequence Diagram
