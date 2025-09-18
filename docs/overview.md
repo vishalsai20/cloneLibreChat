@@ -1,4 +1,4 @@
-# AIChat Project Overview
+# AIChat Overview
 
 This document provides a **high-level technical overview** of AIChat (forked from LibreChat). It explains how the **frontend and backend interact**, along with a **database schema overview** to understand the entire system.
 
@@ -11,6 +11,28 @@ AIChat follows a client-server architecture:
 * **Frontend:** Built with React, communicates via REST APIs & WebSockets.
 * **Backend:** Node.js + Express server, acts as the API gateway, connects to Database & AI providers(OpenAI, Google, etc).
 * **Database:** MongoDB (stores users, messages, presets, conversations).
+
+1. **User Opens the App**  
+   The browser loads the React frontend, which immediately requests initial configuration (available AI models, settings, etc.) from the backend.
+
+2. **Frontend Fetches Config**  
+   The React app calls `GET /config`.  
+   The backend fetches app settings (presets, available providers, etc.) from MongoDB and returns them as JSON.
+
+3. **User Sends a Message**  
+   When the user types a message and clicks send, the frontend sends a `POST /chat` request to the backend.
+
+4. **Backend Processes the Request**  
+   The backend:
+   * Stores the user's message in the **messages** collection.
+   * Forwards the message to the selected **AI provider** (OpenAI, Anthropic, etc.).
+   * Waits for the AI’s response.
+
+5. **AI Response Returned**  
+   The backend stores the AI response in the database and sends it back to the frontend.
+
+6. **Frontend Updates the UI**  
+   The React app updates the chat interface, displaying the AI’s reply to the user.
 
 ### Sequence Diagram
 
@@ -35,8 +57,6 @@ sequenceDiagram
     B-->>F: Send AI reply
     F-->>U: Display AI response in chat UI
 ```
-
-This flow repeats for each user message. Streaming (if enabled) sends partial tokens to the UI in real-time.
 
 ---
 
