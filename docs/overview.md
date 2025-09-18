@@ -34,6 +34,18 @@ AIChat follows a client-server architecture:
 6. **Frontend Updates the UI**  
    The React app updates the chat interface, displaying the AI’s reply to the user.
 
+* We run the npm run background command on our terminal to start the application. Using the port:3080 starts the application.
+* Frontend loads the React app assets from `client/` and fetches the config settings from `.env` like available AI providers, user settings.
+* Backend server (Node.js) starts listening to this port. It connects Database for users, conversation history, messages data. Also connects to AI providers and loads middleware like auth.
+
+* We lofin via the frontend forms (Credentials and user data are stored in DB).
+
+* When we submit a prompt, the frontend sends a HTTP request to backend with the prompt, metadata, model, conversationID, etc
+* Backend receives the request and validates it and checks for the previous messages in conversation (if any)
+* Backend then sends message + context to the AI provider
+* Once the backend recieves the response from the AI, it stores in the database and returns the response to the frontend and updates UI.
+
+
 ### Sequence Diagram
 
 ```mermaid
@@ -97,12 +109,14 @@ erDiagram
     }
 ```
 
-### Key Points:
+### Tables:
 
 * **USERS** → One user can have many conversations.
 * **CONVERSATIONS** → Each conversation stores multiple messages.
 * **MESSAGES** → Linked to conversations for full history.
 * **PRESETS** → Stores reusable model configurations.
+
+* NOTE : There exists other tables also.
 
 ---
 
