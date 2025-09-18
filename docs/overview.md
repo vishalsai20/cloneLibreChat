@@ -86,6 +86,8 @@ AIChat uses **MongoDB**, with collections focused on user data, chat history, an
 erDiagram
     USERS ||--o{ CONVERSATIONS : "has"
     CONVERSATIONS ||--o{ MESSAGES : "contains"
+    USERS ||--o{ FILES : "uploads"
+    CONVERSATIONS ||--o{ FILES : "uses"
 
     USERS {
         string _id
@@ -111,6 +113,16 @@ erDiagram
         string name
         json config
     }
+    FILES {
+        string _id
+        string userId
+        string conversationId 
+        string fileName
+        string fileType
+        string storagePath
+        date uploadedAt
+    }
+
 ```
 
 ### Tables:
