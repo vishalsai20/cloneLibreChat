@@ -1,6 +1,6 @@
 # AIChat Project Overview
 
-This document provides a **high-level technical overview** of AIChat (forked from LibreChat). It explains how the **frontend and backend interact**, along with a **database schema overview** to help contributors quickly understand the system.
+This document provides a **high-level technical overview** of AIChat (forked from LibreChat). It explains how the **frontend and backend interact**, along with a **database schema overview** to understand the entire system.
 
 ---
 
@@ -9,7 +9,7 @@ This document provides a **high-level technical overview** of AIChat (forked fro
 AIChat follows a client-server architecture:
 
 * **Frontend:** Built with React, communicates via REST APIs & WebSockets.
-* **Backend:** Node.js + Express server, acts as the API gateway, connects to DB & AI providers.
+* **Backend:** Node.js + Express server, acts as the API gateway, connects to Database & AI providers(OpenAI, Google, etc).
 * **Database:** MongoDB (stores users, messages, presets, conversations).
 
 ### Sequence Diagram
@@ -91,7 +91,3 @@ erDiagram
 * Supports multiple AI providers (OpenAI, Azure, Anthropic, etc.).
 * Backend handles authentication, rate-limiting, and persistence.
 * Frontend is provider-agnostic: it only cares about responses from API.
-
----
-
-**This file should be kept updated** whenever the schema or major data flow changes.
